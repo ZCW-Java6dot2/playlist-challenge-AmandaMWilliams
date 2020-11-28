@@ -1,30 +1,43 @@
 package io.zipcoder;
 
-public class Music {
+import java.util.Arrays;
+import java.util.List;
 
-    private String[] playList;
+public class Music {
+    private final String[] playList;
 
     public Music(String[] playList) {
-
         this.playList = playList;
     }
 
     public Integer selection(Integer startIndex, String selection) {
-        int forwardCount = 0;
-        int backwardCount = 0;
+        String currentSong = playList[startIndex];
+        int currentIndex = 0;
+        int forwardSteps = 0;
+        int backwardSteps = 0;
+        while (!currentSong.equals(selection)) {
+            currentIndex++;
+            forwardSteps++;
 
-        for (int i = 0; i < playList.length; i++) {
-            if (playList[startIndex].equals(selection)) {
-                return 0;
-            } else {
-                forwardCount++;
-                backwardCount--;
+            currentSong = playList[currentIndex];
+        }
+
+        currentIndex = startIndex;
+        currentSong = playList[currentIndex];
+        while (!currentSong.equals(selection)) {
+            if (currentIndex < 0) {
+                currentIndex = playList.length - 1;
             }
+            currentSong = playList[currentIndex];
+            backwardSteps--;
+            currentIndex--;
         }
+        backwardSteps = Math.abs(backwardSteps);
 
-        if (forwardCount > Math.abs(backwardCount)) {
-            return Math.abs(backwardCount);
+        if(forwardSteps > backwardSteps) {
+            return backwardSteps-1;
+        } else {
+            return forwardSteps-1;
         }
-        return forwardCount;
     }
 }
